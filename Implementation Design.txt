@@ -1,0 +1,19 @@
+I choose to implement the FIFO, LRU, and Clock strategy by taking advantage of buffer indexes.
+The FIFO and LRU strategy works in such a way that the buffer indexes are treated like elements in a queue that can be made with array list in java; the 0 index in the arraylist represents the front of the queue,
+while the last index of it represents the end of queue.
+Using that concept, I make 2 separate array list to keep track of the FIFO and LRU buffer queue, with the following rules in mind: 
+1. Everytime a buffer got modified, it will be removed from the queue, meaning the next least read/ modified buffer will take the front line.
+2. Everytime an unpin/ pin function is called, the function will check whether the buffer is already on the LRU (for unpin) or the FIFO (for pin) list. If the buffer is currently on the list, it will remove it from the queue. Then,the buffer will be added to the end of queue.
+So for example the FIFO queue before the start of the FIFO strategy test would look like:
+[0,2,3,1]
+Upon assignment of block 60 to buffer #0, it will look like;
+[2,3,1]
+which means the next available, unpinned buffer for block 70 to be assigned to is buffer #2.
+
+The Clock strategy takes advantage of the FIFO list, using the end of FIFO queue as the last read in and taking it as the before-starting point of the clock.
+so lets say the FIFO queue looks like this;
+[0,2,3,1]
+indicating that the last modified buffer is buffer #1. Hence the iteration check will start at buffer #2, and will keep checking if there's an unpinned buffer until it stops looking either when the unpinned buffer is found or it reach the starting point/initial index. I use the aid of modulo division to iterate through the buffer indexes, simulating the clock-like movement.
+
+
+
