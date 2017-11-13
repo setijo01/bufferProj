@@ -171,6 +171,7 @@ class BasicBufferMgr {
       int buffIndx = FIFOlist.get(0);
       if(!bufferpool[buffIndx].isPinned()){
           Buffer buff = bufferpool[buffIndx];
+          FIFOlist.remove(new Integer(buffIndx));
           return buff;
       }
       return null;
@@ -180,9 +181,12 @@ class BasicBufferMgr {
     * @return 
     */
    private Buffer useLRUStrategy() {
-      int buffIndx = LRUlist.get(FIFOlist.size()-1);
+      System.out.println(LRUlist);
+      int buffIndx = LRUlist.get(0);
+      System.out.println(buffIndx);
       if(!bufferpool[buffIndx].isPinned()){
           Buffer buff = bufferpool[buffIndx];
+          LRUlist.remove(new Integer(buffIndx));
           return buff;
       }
       return null;
@@ -192,7 +196,7 @@ class BasicBufferMgr {
     * @return 
     */
    private Buffer useClockStrategy() {
-      int startIndx = FIFOlist.get(0);
+      int startIndx = FIFOlist.get(FIFOlist.size()-1);
       int searchIndx = startIndx+1;
       while(searchIndx % (bufferpool.length+1)!= startIndx){
           if(!bufferpool[searchIndx % (bufferpool.length+1)].isPinned()){
